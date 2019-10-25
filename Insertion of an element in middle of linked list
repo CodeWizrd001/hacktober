@@ -1,0 +1,177 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+
+
+struct list
+{
+	int value;
+	struct list*next;
+};
+
+
+void addelement(struct list** head,FILE*fin,FILE* fout)
+{
+	int element;	
+	while(fscanf(fin,"%d",&element))
+	{
+	
+	struct list*new=(struct list*)malloc(sizeof(struct list));
+	if(new==NULL)
+	{
+		fprintf(fout,"-999");
+		exit(0);
+	}
+
+	
+	new->value=element;
+	new->next=(*head);
+	(*head)=new;
+	}
+		
+}
+
+void insert_middle(struct list**head,int new)
+{
+	int count=0;
+
+	struct list*t=(*head);
+	if((*head)!=NULL){
+	while(1)
+	{
+		count++;
+		if((t->next)==NULL)
+			break;
+		else
+			t=t->next;
+	}}
+	int pos=(count)/2+1;
+	count=1;
+	t=*head;
+
+	while(count<pos-1)
+	{
+		t=t->next;
+		count++;
+	}
+	struct list*n=(struct list*)malloc(sizeof(struct list));
+	n->value=new;
+	if(pos==1)
+	{
+		n->next=(*head);
+		(*head)=n;
+		return;
+	}
+	n->next=t->next;
+
+	t->next=n;
+}
+
+
+void print(struct list*head,FILE *fout)
+{
+	
+	if(head==NULL)
+	{
+		fprintf(fout,"-1\n");
+		return;
+	}
+
+
+
+	if((head->next)==NULL)
+		fprintf(fout,"%d ",head->value);
+	else
+	{
+		print(head->next,fout);
+		fprintf(fout,"%d ",head->value);
+	}
+}
+
+
+
+void main()
+{
+	FILE *fin,*fout;
+
+        fin=fopen("input.txt","r");
+	fout=fopen("output.txt","w");
+
+        char o;
+	struct list*head=NULL;
+	
+	
+	float n1;/*,n2;
+	if(((fscanf(fin,"%f",&n2))!=1)||(n2!=(int)n2)||(n2<=0))
+				 {
+					 fprintf(fout,"-999\n");
+					 exit(0);
+				 }
+	int c=(int)n2;
+	Q=(int*)malloc(c*sizeof(int));
+
+	if(Q==NULL)
+	{
+		fprintf(fout,"-999\n");
+		exit(0);
+	}*/
+	do
+	{
+		if(fscanf(fin," %c",&o)!=1)
+		{
+			fprintf(fout,"-999");
+			exit(0);
+		}
+
+		switch (o)
+		{
+
+			case 'c':/*
+				if(((fscanf(fin,"%f",&n1))!=1)||(n1!=(int)n1))
+				 {
+					 fprintf(fout,"-999");
+					 exit(0);
+				 }
+				 int element=(int)n1;*/
+				 
+		       	         addelement(&head,fin,fout);
+				 
+		                 break; 
+			case 'i':;
+			 	 if(((fscanf(fin,"%f",&n1))!=1)||(n1!=(int)n1))
+				 {
+					 fprintf(fout,"-999");
+					 exit(0);
+				 }
+				 int new=(int)n1;
+				 
+				 insert_middle(&head,new);
+				 break;
+			case 'p':;/*
+				 int n;
+                                 if((fscanf(fin,"%d",&n)!=1)||(n<0))
+				 {
+					 fprintf(fout,"-999\n");
+					 exit(0);
+				 }
+                                 */
+                                 print(head,fout);
+				 fprintf(fout,"\n");
+				 break;
+			case 's':break;
+			default:fprintf(fout,"-999\n");
+				exit(0);
+		}
+	}	while(o!='s');
+	fclose(fin);
+	fclose(fout);
+	
+/*	do
+	{
+		if(head==NULL)
+			break;
+		struct list*n=head->next;
+		free(head);
+		struct list*head=n;
+	}while(head!=NULL);*/
+}
