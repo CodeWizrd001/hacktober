@@ -1,0 +1,156 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+
+
+void enqueue(int *Q,int element,int* f,int* b,int size,FILE* fout)
+{
+	
+
+	
+
+	if(((*f)==-1)||((*b)==-1))
+	{
+		(*f)++;
+		(*b)++;
+		Q[*f]=element;
+		return;
+	}
+	if((((((*b)-(*f))%size)+size)%size+1)==size)
+		
+	{	fprintf(fout,"-999\n");
+		return;
+	}
+
+
+	
+	*b=((*b)+1)%size;
+	Q[*b]=element;
+}
+
+
+int dequeue(int *Q,int *f,int*b,int size)
+{
+	if(((*f)==-1)||((*b)==-1))
+		return -1;
+	if((*f)==(*b))
+	{
+		int temp=Q[*f];
+		(*f)=-1;
+		(*b)=-1;
+		return temp;
+	}
+
+	*f=((*f)+1)%size;
+
+
+
+	return Q[((((*f)-1)%size)+size)%size];
+
+
+}
+
+
+void print(int* Q,int n,int*f,int* b,int size,FILE *fout)
+{
+	
+	if(n==0)
+		n=((((*b)-(*f))%size)+size)%size+1;
+	if(((*f)==-1)||((*b)==-1))
+	{
+		fprintf(fout,"-1\n");
+		return;
+	}
+
+	for(int i=0;i<n;i++)
+	{
+		
+		
+
+ 		fprintf(fout,"%d ",Q[((*f)+i)%size]);
+		if((((*f)+i)%size==*b)&&(i!=n-1))
+
+		{
+			
+			fprintf(fout,"End");
+			break;
+		}
+
+	}
+
+	fprintf(fout,"\n");
+}
+
+
+
+void main()
+{
+	FILE *fin,*fout;
+
+        fin=fopen("input.txt","r");
+	fout=fopen("output.txt","w");
+
+        char o;
+	int*Q;
+	int front=-1,back=-1;
+	int*f=&front;
+	int*b=&back;
+	float n1,n2;
+	if(((fscanf(fin,"%f",&n2))!=1)||(n2!=(int)n2)||(n2<=0))
+				 {
+					 fprintf(fout,"-999\n");
+					 exit(0);
+				 }
+	int c=(int)n2;
+	Q=(int*)malloc(c*sizeof(int));
+
+	if(Q==NULL)
+	{
+		fprintf(fout,"-999\n");
+		exit(0);
+	}
+	do
+	{
+		if(fscanf(fin," %c",&o)!=1)
+		{
+			fprintf(fout,"-999");
+			exit(0);
+		}
+
+		switch (o)
+		{
+
+			case 'e':
+				if(((fscanf(fin,"%f",&n1))!=1)||(n1!=(int)n1))
+				 {
+					 fprintf(fout,"-999");
+					 exit(0);
+				 }
+				 int element=(int)n1;
+				 
+		       	         enqueue(Q,element,f,b,c,fout);
+				 
+		                 break; 
+			case 'd':
+				 fprintf(fout,"%d\n",dequeue(Q,f,b,c));
+				 
+				 break;
+			case 'p':;
+				 int n;
+                                 if((fscanf(fin,"%d",&n)!=1)||(n<0))
+				 {
+					 fprintf(fout,"-999\n");
+					 exit(0);
+				 }
+                                 
+                                 print(Q,n,f,b,c,fout);
+				 break;
+			case 's':break;
+			default:fprintf(fout,"-999\n");
+				exit(0);
+		}
+	}	while(o!='s');
+	fclose(fin);
+	fclose(fout);
+	free(Q);
+}
